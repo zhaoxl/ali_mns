@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe Aliyun::Mqs::Queue do
+describe AliMqs::Queue do
   
   specify ".[] will create new queue instance" do
-    queue = Aliyun::Mqs::Queue["aQueue"]
+    queue = AliMqs::Queue["aQueue"]
     expect(queue).not_to be_nil
     expect(queue.name).to eq("aQueue")
   end
@@ -21,25 +21,25 @@ describe Aliyun::Mqs::Queue do
     }
 
     specify "find all queues" do
-      expect(Aliyun::Mqs::Request).to receive(:get).with("/", mqs_headers:{}).and_return xml_response
-      queues = Aliyun::Mqs::Queue.queues
+      expect(AliMqs::Request).to receive(:get).with("/", mqs_headers:{}).and_return xml_response
+      queues = AliMqs::Queue.queues
       expect(queues.size).to eq(1)
       expect(queues[0].name).to eq("test")
     end
 
     specify "query queues" do
-      expect(Aliyun::Mqs::Request).to receive(:get).with("/", mqs_headers:{"x-mqs-prefix"=>"query"}).and_return xml_response
-      queues = Aliyun::Mqs::Queue.queues(query: "query")
+      expect(AliMqs::Request).to receive(:get).with("/", mqs_headers:{"x-mqs-prefix"=>"query"}).and_return xml_response
+      queues = AliMqs::Queue.queues(query: "query")
     end
 
     specify "find number of queues" do
-      expect(Aliyun::Mqs::Request).to receive(:get).with("/", mqs_headers:{"x-mqs-ret-number"=>5}).and_return xml_response
-      queues = Aliyun::Mqs::Queue.queues(size: 5)
+      expect(AliMqs::Request).to receive(:get).with("/", mqs_headers:{"x-mqs-ret-number"=>5}).and_return xml_response
+      queues = AliMqs::Queue.queues(size: 5)
     end
 
     specify "find of queues start at given position" do
-      expect(Aliyun::Mqs::Request).to receive(:get).with("/", mqs_headers:{"x-mqs-marker"=>2}).and_return xml_response
-      queues = Aliyun::Mqs::Queue.queues(offset: 2)
+      expect(AliMqs::Request).to receive(:get).with("/", mqs_headers:{"x-mqs-marker"=>2}).and_return xml_response
+      queues = AliMqs::Queue.queues(offset: 2)
     end
   end
 
@@ -49,7 +49,7 @@ describe Aliyun::Mqs::Queue do
       expect(RestClient).to receive(:put) do |*args|
         path, body, headers = *args
         expect(path).to eq("http://owner-id.mqs-region.aliyuncs.com/aQueue")
-        xml = Hash.from_xml(body)
+        xml = Hash.AliMqs(body)
         expect(xml["Queue"]["VisibilityTimeout"]).to eq("30")
         expect(xml["Queue"]["DelaySeconds"]).to eq("0")
         expect(xml["Queue"]["MaximumMessageSize"]).to eq("65536")
@@ -57,22 +57,22 @@ describe Aliyun::Mqs::Queue do
         expect(xml["Queue"]["PollingWaitSeconds"]).to eq("0")
         expect(headers).not_to be_nil
       end
-      Aliyun::Mqs::Queue["aQueue"].create
+      AliMqs::Queue["aQueue"].create
     end
 
     specify "will create a new queue with customized options" do
       expect(RestClient).to receive(:put) do |*args|
         path, body, headers = *args
-        expect(Hash.from_xml(body)["Queue"]["PollingWaitSeconds"]).to eq("30")
+        expect(Hash.AliMqs(body)["Queue"]["PollingWaitSeconds"]).to eq("30")
       end
-      Aliyun::Mqs::Queue["aQueue"].create(:PollingWaitSeconds => 30)
+      AliMqs::Queue["aQueue"].create(:PollingWaitSeconds => 30)
     end
   end
 
   describe "#delete" do
     specify "will delete existing queue" do
-      expect(Aliyun::Mqs::Request).to receive(:delete).with("/aQueue")
-      Aliyun::Mqs::Queue["aQueue"].delete
+      expect(AliMqs::Request).to receive(:delete).with("/aQueue")
+      AliMqs::Queue["aQueue"].delete
     end
   end
 
@@ -81,24 +81,24 @@ describe Aliyun::Mqs::Queue do
       expect(RestClient).to receive(:post) do |*args|
         path, body, headers = *args
         expect(path).to eq("http://owner-id.mqs-region.aliyuncs.com/aQueue/messages")
-        xml = Hash.from_xml(body)
+        xml = Hash.AliMqs(body)
         expect(xml["Message"]["MessageBody"]).to eq("text message")
         expect(xml["Message"]["DelaySeconds"]).to eq("0")
         expect(xml["Message"]["Priority"]).to eq("10")
         expect(headers).not_to be_nil
       end
 
-      Aliyun::Mqs::Queue["aQueue"].send_message "text message"
+      AliMqs::Queue["aQueue"].send_message "text message"
     end
 
 
     specify "will send a message to a queue with customized options" do
       expect(RestClient).to receive(:post) do |*args|
         path, body, headers = *args
-        expect(Hash.from_xml(body)["Message"]["Priority"]).to eq("1")
+        expect(Hash.AliMqs(body)["Message"]["Priority"]).to eq("1")
       end
 
-      Aliyun::Mqs::Queue["aQueue"].send_message "text message", :Priority=>1
+      AliMqs::Queue["aQueue"].send_message "text message", :Priority=>1
     end
   end
   
@@ -122,9 +122,9 @@ describe Aliyun::Mqs::Queue do
     }
 
     specify "will receive message from a queue" do
-      expect(Aliyun::Mqs::Request).to receive(:get).with("/aQueue/messages",{}).and_return xml_response
+      expect(AliMqs::Request).to receive(:get).with("/aQueue/messages",{}).and_return xml_response
 
-      message = Aliyun::Mqs::Queue["aQueue"].receive_message
+      message = AliMqs::Queue["aQueue"].receive_message
       expect(message).not_to be_nil
       expect(message.id).to eq("5fea7756-0ea4-451a-a703-a558b933e274")
       expect(message.body).to eq("This is a test message")
@@ -138,8 +138,8 @@ describe Aliyun::Mqs::Queue do
     end
 
     specify "will receive message from a queue with poll wait" do
-      expect(Aliyun::Mqs::Request).to receive(:get).with("/aQueue/messages",params:{waitseconds: 60}).and_return xml_response
-      message = Aliyun::Mqs::Queue["aQueue"].receive_message wait_seconds: 60
+      expect(AliMqs::Request).to receive(:get).with("/aQueue/messages",params:{waitseconds: 60}).and_return xml_response
+      message = AliMqs::Queue["aQueue"].receive_message wait_seconds: 60
     end
   end
 
@@ -160,8 +160,8 @@ describe Aliyun::Mqs::Queue do
     }
 
     specify "will peek message of a queue" do
-      expect(Aliyun::Mqs::Request).to receive(:get).with("/aQueue/messages",params:{peekonly: true}).and_return xml_response
-      message = Aliyun::Mqs::Queue["aQueue"].peek_message
+      expect(AliMqs::Request).to receive(:get).with("/aQueue/messages",params:{peekonly: true}).and_return xml_response
+      message = AliMqs::Queue["aQueue"].peek_message
 
       expect(message).not_to be_nil
       expect(message.id).to eq("5fea7756-0ea4-451a-a703-a558b933e274")

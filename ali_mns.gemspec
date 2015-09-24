@@ -1,16 +1,16 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'aliyun/mqs/version'
+require 'ali_mns/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'aliyun-mqs-V2'
-  spec.version       = Aliyun::Mqs::VERSION
-  spec.authors       = ["mgampkay","skinnyworm"]
-  spec.email         = ["mgampkay@gmail.com", "askinnyworm@gmail.com"]
-  spec.summary       = 'Ruby SDK for Aliyun MQS (non-official)'
-  spec.description   = 'Non-official SDK for Aliyun MQS'
-  spec.homepage      = 'https://github.com/zhenjun115/aliyun-mqs-V2'
+  spec.name          = 'ali_mns'
+  spec.version       = AliMns::VERSION
+  spec.authors       = ["Backkom"]
+  spec.email         = ["99866770@qq.com"]
+  spec.summary       = 'Ruby SDK for Aliyun MNS (non-official)'
+  spec.description   = 'Non-official SDK for Aliyun MNS'
+  spec.homepage      = 'https://github.com/zhaoxl/ali_mns'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0")

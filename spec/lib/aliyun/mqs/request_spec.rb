@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Aliyun::Mqs::Request do
+describe AliMqs::Request do
   
   describe "Reqest methods" do
     specify "get" do
@@ -10,7 +10,7 @@ describe Aliyun::Mqs::Request do
         expect(headers).to be_a(Hash)
       end
 
-      Aliyun::Mqs::Request.get("/path")
+      AliMqs::Request.get("/path")
     end
 
     specify "get with params" do
@@ -20,7 +20,7 @@ describe Aliyun::Mqs::Request do
         expect(headers).to be_a(Hash)
       end
       
-      Aliyun::Mqs::Request.get("/path", params:{a:1})
+      AliMqs::Request.get("/path", params:{a:1})
     end
 
     specify "get with mqs_headers" do
@@ -30,7 +30,7 @@ describe Aliyun::Mqs::Request do
         expect(headers.slice("x-mqs-1")).to eq("x-mqs-1"=>"1")
       end
       
-      Aliyun::Mqs::Request.get("/path", mqs_headers:{"x-mqs-1"=>"1"})
+      AliMqs::Request.get("/path", mqs_headers:{"x-mqs-1"=>"1"})
     end
    
     specify "delete" do
@@ -40,7 +40,7 @@ describe Aliyun::Mqs::Request do
         expect(headers).to be_a(Hash)
       end
 
-      Aliyun::Mqs::Request.delete("/path")
+      AliMqs::Request.delete("/path")
     end
 
     specify "post with content" do
@@ -51,7 +51,7 @@ describe Aliyun::Mqs::Request do
         expect(headers).to be_a(Hash)
       end
 
-      Aliyun::Mqs::Request.post("/path"){|request| request.content "content"}
+      AliMqs::Request.post("/path"){|request| request.content "content"}
     end
 
     specify "put with content" do
@@ -62,7 +62,7 @@ describe Aliyun::Mqs::Request do
         expect(headers).to be_a(Hash)
       end
       
-      Aliyun::Mqs::Request.put("/path"){|request| request.content "content"}
+      AliMqs::Request.put("/path"){|request| request.content "content"}
     end
   end
 
@@ -72,7 +72,7 @@ describe Aliyun::Mqs::Request do
 
   specify "has default content namespace when content is set" do
     subject.content("content", attr1: 1, attr2: 2)
-    xml = Hash.from_xml(subject.body)
+    xml = Hash.AliMqs(subject.body)
 
     expect(subject.content_type).to eq("text/xml;charset=utf-8")
     expect(xml["content"]["xmlns"]).to eq("http://mqs.aliyuncs.com/doc/v1/")

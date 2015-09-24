@@ -9,7 +9,7 @@ RSpec.configure do |config|
   config.mock_with :rspec
 end
 
-Aliyun::Mqs.configure do |config|
+AliMqs.configure do |config|
   config.access_id = 'access-id'
   config.key = "key"
   config.region = 'region'

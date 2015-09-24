@@ -60,7 +60,7 @@ production:
 At last you can also config the gem in place, by excute the following code before invoking and queue service.
 
 ```ruby
-Aliyun::Mqs.configure do |config|
+AliMqs.configure do |config|
   config.access_id = 'access-id'
   config.key = "key"
   config.region = 'region'
@@ -158,34 +158,34 @@ Following are some example useage of the gem. You can read the specs to understa
 
 ```ruby
 #get a list of queue object
-queues = Aliyun::Mqs::Queue.queues
+queues = AliMqs::Queue.queues
 
 #get all queues start with name 'query'
-queues =Aliyun::Mqs::Queue.queues(query: "query")
+queues =AliMqs::Queue.queues(query: "query")
 
 #get all queues start with name 'query'
-queues = Aliyun::Mqs::Queue.queues(size: 5)
+queues = AliMqs::Queue.queues(size: 5)
 
 #Obtain a queue object with name "aQueue"
-queue = Aliyun::Mqs::Queue["aQueue"]
+queue = AliMqs::Queue["aQueue"]
 
 #Create a new queue
-Aliyun::Mqs::Queue["aQueue"].create
+AliMqs::Queue["aQueue"].create
 
 #Create a new queue with polling wait 30 seconds
-Aliyun::Mqs::Queue["aQueue"].create(:PollingWaitSeconds => 30)
+AliMqs::Queue["aQueue"].create(:PollingWaitSeconds => 30)
 
 #Delete an existing queue
-Aliyun::Mqs::Queue["aQueue"].delete
+AliMqs::Queue["aQueue"].delete
 
 #Send a text message
-Aliyun::Mqs::Queue["aQueue"].send_message "text message"
+AliMqs::Queue["aQueue"].send_message "text message"
 
 #Send a text message with priority option
-Aliyun::Mqs::Queue["aQueue"].send_message "text message", :Priority=>1
+AliMqs::Queue["aQueue"].send_message "text message", :Priority=>1
 
 #Receive a message
-message = Aliyun::Mqs::Queue["aQueue"].receive_message
+message = AliMqs::Queue["aQueue"].receive_message
 
 #Sample rspec for a message
 expect(message).not_to be_nil
@@ -200,17 +200,17 @@ expect(message.dequeue_count).to eq(1)
 expect(message.priority).to eq(8)
 
 #Receive a message with option to override the default poll wait time of the queue.
-message = Aliyun::Mqs::Queue["aQueue"].receive_message wait_seconds: 60
+message = AliMqs::Queue["aQueue"].receive_message wait_seconds: 60
 
 #Peek message in the queue
-message = Aliyun::Mqs::Queue["aQueue"].peek_message
+message = AliMqs::Queue["aQueue"].peek_message
 
 #Delete received message
-message = Aliyun::Mqs::Queue["aQueue"].receive_message
+message = AliMqs::Queue["aQueue"].receive_message
 message.delete
 
 #Change message visibility
-message = Aliyun::Mqs::Queue["aQueue"].receive_message
+message = AliMqs::Queue["aQueue"].receive_message
 message.change_visibility 10
 
 ```

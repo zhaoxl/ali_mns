@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
 require 'aliyun/mqs'
 
-Aliyun::Mqs::Cli.start(ARGV)
+AliMqs::Cli.start(ARGV)
