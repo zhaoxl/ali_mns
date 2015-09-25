@@ -3,6 +3,7 @@ module AliMns
 
     attr_reader :queue, :messages
     delegate :[], to: :messages
+    delegate :each, to: :messages
 
     def initialize queue, content
       @queue = queue
