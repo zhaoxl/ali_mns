@@ -1,7 +1,7 @@
 require 'rspec'
 require "codeclimate-test-reporter"
 CodeClimate::TestReporter.start
-require 'aliyun/mqs'
+require 'ali_mns'
 
 Dir[File.join(File.dirname(__FILE__), "../spec/support/**/*.rb")].sort.each {|f| require f}
 RSpec.configure do |config|
@@ -9,7 +9,7 @@ RSpec.configure do |config|
   config.mock_with :rspec
 end
 
-AliMqs.configure do |config|
+AliMns.configure do |config|
   config.access_id = 'access-id'
   config.key = "key"
   config.region = 'region'

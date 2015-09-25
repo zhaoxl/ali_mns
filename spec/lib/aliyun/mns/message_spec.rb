@@ -1,11 +1,11 @@
 require 'spec_helper'
 
-describe AliMqs::Queue do
+describe AliMns::Queue do
 
   let(:xml_message){
-    AliMqs::Message.new(AliMqs::Queue["aQueue"], <<-XML)
+    AliMns::Message.new(AliMns::Queue["aQueue"], <<-XML)
       <?xml version="1.0" encoding="UTF-8" ?> 
-      <Message xmlns="http://mqs.aliyuncs.com/doc/v1/">
+      <Message xmlns="http://mns.aliyuncs.com/doc/v1/">
         <MessageId>5fea7756-0ea4-451a-a703-a558b933e274</MessageId> 
         <ReceiptHandle>MbZj6wDWli+QEauMZc8ZRv37sIW2iJKq3M9Mx/KSbkJ0</ReceiptHandle>
         <MessageBodyMD5>fafb00f5732ab283681e124bf8747ed1</MessageBodyMD5> 
@@ -20,9 +20,9 @@ describe AliMqs::Queue do
   }
 
   let(:peek_xml_message){
-    AliMqs::Message.new(AliMqs::Queue["aQueue"], <<-XML)
+    AliMns::Message.new(AliMns::Queue["aQueue"], <<-XML)
       <?xml version="1.0" encoding="UTF-8" ?>
-      <Message xmlns="http://mqs.aliyuncs.com/doc/v1/">
+      <Message xmlns="http://mns.aliyuncs.com/doc/v1/">
         <MessageId>5fea7756-0ea4-451a-a703-a558b933e274</MessageId>
         <MessageBodyMD5>fafb00f5732ab283681e124bf8747ed1</MessageBodyMD5>
         <MessageBody>This is a test message</MessageBody>
@@ -36,7 +36,7 @@ describe AliMqs::Queue do
 
   describe "#delete" do
     specify "will delete the message from queue" do
-      expect(AliMqs::Request).to receive(:delete).with("/aQueue/messages", params:{:ReceiptHandle=>"MbZj6wDWli+QEauMZc8ZRv37sIW2iJKq3M9Mx/KSbkJ0"})
+      expect(AliMns::Request).to receive(:delete).with("/aQueue/messages", params:{:ReceiptHandle=>"MbZj6wDWli+QEauMZc8ZRv37sIW2iJKq3M9Mx/KSbkJ0"})
       xml_message.delete
     end
 
@@ -47,7 +47,7 @@ describe AliMqs::Queue do
 
   describe "#change_visibility" do
     specify "will change message's visibility timeout" do
-      expect(AliMqs::Request).to receive(:put).with("/aQueue/messages", params:{
+      expect(AliMns::Request).to receive(:put).with("/aQueue/messages", params:{
         :ReceiptHandle=>"MbZj6wDWli+QEauMZc8ZRv37sIW2iJKq3M9Mx/KSbkJ0",
         :VisibilityTimeout => 10
       })

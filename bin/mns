@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+require 'ali_mns'
+
+AliMns::Cli.start(ARGV)
