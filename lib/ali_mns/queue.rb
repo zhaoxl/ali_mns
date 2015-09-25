@@ -57,7 +57,7 @@ module AliMns
       request_opts = {params:{numOfMessages: limit}}
       request_opts[:params].merge!({waitseconds: wait_seconds}) if wait_seconds
       
-      return nil unless result = Request.get(messages_path, request_opts)
+      return [] unless result = Request.get(messages_path, request_opts)
       BatchMessage.new(self, result)
     end
 

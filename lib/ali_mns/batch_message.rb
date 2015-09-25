@@ -2,6 +2,7 @@ module AliMns
   class BatchMessage
 
     attr_reader :queue, :messages
+    delegate :[], to: :messages
 
     def initialize queue, content
       @queue = queue

@@ -83,8 +83,6 @@ module AliMns
     
     def delete_with_body(url, body, headers, &block)
       response = RestClient::Request.execute(:method => :delete, :url => url, :payload => body, :headers => headers, &block)
-      response
-      binding.pry
     end
 
     private
