@@ -8,7 +8,7 @@ module AliMns
       @queue = queue
       @id = h["MessageId"]
       @body_md5 = h["MessageBodyMD5"]
-      @body = Base64.decode64(h["MessageBody"])
+      @body = h["MessageBody"]
       @enqueue_at = Time.at(h["EnqueueTime"].to_i/1000.0)
       @first_enqueue_at = Time.at(h["FirstDequeueTime"].to_i/1000.0)
       @next_visible_at = Time.at(h["NextVisibleTime"].to_i/1000.0) if h["NextVisibleTime"]

@@ -12,7 +12,7 @@ describe AliMns::Queue do
         <MessageBody>This is a test message</MessageBody>
         <EnqueueTime>1250700979248000</EnqueueTime> 
         <NextVisibleTime>1250700799348000</NextVisibleTime>
-        <FirstDequeueTime>1250700779318000</FirstDequeueTime > 
+        <FirstDequeueTime>1250700779318000</FirstDequeueTime> 
         <DequeueCount>1</DequeueCount >
         <Priority>8</Priority>
       </Message>
@@ -36,7 +36,7 @@ describe AliMns::Queue do
 
   describe "#delete" do
     specify "will delete the message from queue" do
-      expect(AliMns::Request).to receive(:delete).with("/aQueue/messages", params:{:ReceiptHandle=>"MbZj6wDWli+QEauMZc8ZRv37sIW2iJKq3M9Mx/KSbkJ0"})
+      expect(AliMns::Request).to receive(:delete).with("/queues/aQueue/messages", params:{:ReceiptHandle=>"MbZj6wDWli+QEauMZc8ZRv37sIW2iJKq3M9Mx/KSbkJ0"})
       xml_message.delete
     end
 
@@ -47,7 +47,7 @@ describe AliMns::Queue do
 
   describe "#change_visibility" do
     specify "will change message's visibility timeout" do
-      expect(AliMns::Request).to receive(:put).with("/aQueue/messages", params:{
+      expect(AliMns::Request).to receive(:put).with("/queues/aQueue/messages", params:{
         :ReceiptHandle=>"MbZj6wDWli+QEauMZc8ZRv37sIW2iJKq3M9Mx/KSbkJ0",
         :VisibilityTimeout => 10
       })

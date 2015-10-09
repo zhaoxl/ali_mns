@@ -49,7 +49,7 @@ describe AliMns::Queue do
       expect(RestClient).to receive(:put) do |*args|
         path, body, headers = *args
         expect(path).to eq("http://owner-id.mns-region.aliyuncs.com/aQueue")
-        xml = Hash.AliMns(body)
+        xml = Hash.from_xml(body)
         expect(xml["Queue"]["VisibilityTimeout"]).to eq("30")
         expect(xml["Queue"]["DelaySeconds"]).to eq("0")
         expect(xml["Queue"]["MaximumMessageSize"]).to eq("65536")
@@ -63,7 +63,7 @@ describe AliMns::Queue do
     specify "will create a new queue with customized options" do
       expect(RestClient).to receive(:put) do |*args|
         path, body, headers = *args
-        expect(Hash.AliMns(body)["Queue"]["PollingWaitSeconds"]).to eq("30")
+        expect(Hash.from_xml(body)["Queue"]["PollingWaitSeconds"]).to eq("30")
       end
       AliMns::Queue["aQueue"].create(:PollingWaitSeconds => 30)
     end
@@ -81,7 +81,7 @@ describe AliMns::Queue do
       expect(RestClient).to receive(:post) do |*args|
         path, body, headers = *args
         expect(path).to eq("http://owner-id.mns-region.aliyuncs.com/aQueue/messages")
-        xml = Hash.AliMns(body)
+        xml = Hash.from_xml(body)
         expect(xml["Message"]["MessageBody"]).to eq("text message")
         expect(xml["Message"]["DelaySeconds"]).to eq("0")
         expect(xml["Message"]["Priority"]).to eq("10")
@@ -95,7 +95,7 @@ describe AliMns::Queue do
     specify "will send a message to a queue with customized options" do
       expect(RestClient).to receive(:post) do |*args|
         path, body, headers = *args
-        expect(Hash.AliMns(body)["Message"]["Priority"]).to eq("1")
+        expect(Hash.from_xml(body)["Message"]["Priority"]).to eq("1")
       end
 
       AliMns::Queue["aQueue"].send_message "text message", :Priority=>1
@@ -122,7 +122,7 @@ describe AliMns::Queue do
     }
 
     specify "will receive message from a queue" do
-      expect(AliMns::Request).to receive(:get).with("/aQueue/messages",{}).and_return xml_response
+      expect(AliMns::Request).to receive(:get).with("/queues/aQueue/messages",{}).and_return xml_response
 
       message = AliMns::Queue["aQueue"].receive_message
       expect(message).not_to be_nil
@@ -138,7 +138,7 @@ describe AliMns::Queue do
     end
 
     specify "will receive message from a queue with poll wait" do
-      expect(AliMns::Request).to receive(:get).with("/aQueue/messages",params:{waitseconds: 60}).and_return xml_response
+      expect(AliMns::Request).to receive(:get).with("/queues/aQueue/messages",params:{waitseconds: 60}).and_return xml_response
       message = AliMns::Queue["aQueue"].receive_message wait_seconds: 60
     end
   end
@@ -160,7 +160,7 @@ describe AliMns::Queue do
     }
 
     specify "will peek message of a queue" do
-      expect(AliMns::Request).to receive(:get).with("/aQueue/messages",params:{peekonly: true}).and_return xml_response
+      expect(AliMns::Request).to receive(:get).with("/queues/aQueue/messages",params:{peekonly: true}).and_return xml_response
       message = AliMns::Queue["aQueue"].peek_message
 
       expect(message).not_to be_nil

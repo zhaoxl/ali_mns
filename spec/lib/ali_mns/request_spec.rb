@@ -67,12 +67,12 @@ describe AliMns::Request do
   end
 
   specify "has default x-mns-version header" do
-    expect(subject.mns_headers).to eq("x-mns-version" => "2014-07-08")
+    expect(subject.mns_headers).to eq("x-mns-version" => "2015-06-06")
   end
 
   specify "has default content namespace when content is set" do
     subject.content("content", attr1: 1, attr2: 2)
-    xml = Hash.AliMns(subject.body)
+    xml = Hash.from_xml(subject.body)
 
     expect(subject.content_type).to eq("text/xml;charset=utf-8")
     expect(xml["content"]["xmlns"]).to eq("http://mns.aliyuncs.com/doc/v1/")
